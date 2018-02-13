@@ -18,9 +18,6 @@ import static spark.Spark.halt;
 import static spark.Spark.post;
 import static spark.Spark.staticFileLocation;
 
-/**
- * Created by MitchM on 12/15/2017.
- */
 public class Main
 {
    private static final String FLASH_MESSAGE_KEY = "flash_message";
