@@ -8,6 +8,8 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.List;
+
 @Controller
 public class GifController
 {
@@ -15,8 +17,10 @@ public class GifController
     private GifRepository gifRepository;
 
     @RequestMapping( value = "/" )
-    public String listGifs()
+    public String listGifs(ModelMap modelMap)
     {
+        List<Gif> allGifs = gifRepository.getAllGifs();
+        modelMap.put("gifs", allGifs);
         return "home"; //Thymeleaf will resolve this to the html file
     }
 

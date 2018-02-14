@@ -4,6 +4,7 @@ import com.teamtreehouse.giflib.model.Gif;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -30,4 +31,10 @@ public class GifRepository
         }
         return null;
     }
+
+    public List<Gif> getAllGifs()
+    {
+        return ALL_GIFS;
+    }
+
 }
