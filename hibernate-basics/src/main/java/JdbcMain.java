@@ -23,8 +23,10 @@ public class JdbcMain
             statement.executeUpdate("DROP TABLE IF EXISTS contacts");
             statement.executeUpdate("CREATE TABLE contacts ( id INTEGER PRIMARY KEY, firstname STRING, lastname STRING, email STRING, phone INT(10) )");
             // TODO: Insert a couple contacts
-            statement.executeUpdate("INSERT INTO contacts ( firstname, lastname, email, phone ) VALUES ( 'Mitch', 'Maynard', 'mmaynar1@gmail.com', 8675309 )");
-            statement.executeUpdate("INSERT INTO contacts ( firstname, lastname, email, phone ) VALUES ( 'Laura', 'Yates', 'test@test.com', 7777777 )");
+            Contact contact = new Contact("Mitch", "Maynard", "mmaynar1@gmail.com", 8675309L);
+            save(contact, statement);
+            contact = new Contact("Laura", "Yates", "blah@test.com", 8775309L);
+            save(contact, statement);
             // TODO: Fetch all the records from the contacts table
             ResultSet resultSet = statement.executeQuery("select * from contacts");
             // TODO: Iterate over the ResultSet & display contact info
@@ -43,8 +45,11 @@ public class JdbcMain
         }
     }
 
-    public static void save(Contact contact)
+    public static void save(Contact contact, Statement statement) throws SQLException
     {
+        String sql = "INSERT INTO contacts ( firstname, lastname, email, phone ) VALUES ( '%s', '%s', '%s', %d )";
+        sql = String.format(sql, contact.getFirstName(), contact.getLastName(), contact.getEmail(), contact.getPhone());
 
+        statement.executeUpdate(sql);
     }
 }
