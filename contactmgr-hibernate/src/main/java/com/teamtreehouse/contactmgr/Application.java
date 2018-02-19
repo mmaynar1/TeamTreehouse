@@ -1,5 +1,7 @@
 package com.teamtreehouse.contactmgr;
 
+import com.teamtreehouse.contactmgr.model.Contact;
+import com.teamtreehouse.contactmgr.model.Contact.ContactBuilder;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
@@ -19,6 +21,10 @@ public class Application
 
     public static void main(String[] args)
     {
-
+        Contact contact = new ContactBuilder( "Mitch", "Maynard" )
+                .withEmail("mmaynar1@gmail.com")
+                .withPhone(8675309L)
+                .build();
+        System.out.println(contact);
     }
 }
