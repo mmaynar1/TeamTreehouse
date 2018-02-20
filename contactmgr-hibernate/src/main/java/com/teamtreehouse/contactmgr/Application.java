@@ -2,10 +2,15 @@ package com.teamtreehouse.contactmgr;
 
 import com.teamtreehouse.contactmgr.model.Contact;
 import com.teamtreehouse.contactmgr.model.Contact.ContactBuilder;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.service.ServiceRegistry;
+
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import java.util.List;
 
 public class Application
 {
@@ -21,10 +26,59 @@ public class Application
 
     public static void main(String[] args)
     {
-        Contact contact = new ContactBuilder( "Mitch", "Maynard" )
+        Contact contact = new ContactBuilder("Mitch", "Maynard")
                 .withEmail("mmaynar1@gmail.com")
                 .withPhone(8675309L)
                 .build();
-        System.out.println(contact);
+        save(contact);
+
+
+        fetchAllContacts().forEach(System.out::println);
+    }
+
+    private static List<Contact> fetchAllContacts()
+    {
+        Session session = sessionFactory.openSession();
+
+        // DEPRECATED: Create Criteria
+        // Criteria criteria = session.createCriteria(Contact.class);
+
+        // DEPRECATED: Get a list of Contact objects according to the Criteria object
+        // List<Contact> contacts = criteria.list();
+
+        // UPDATED: Create CriteriaBuilder
+        CriteriaBuilder builder = session.getCriteriaBuilder();
+
+        // UPDATED: Create CriteriaQuery
+        CriteriaQuery<Contact> criteria = builder.createQuery(Contact.class);
+
+        // UPDATED: Specify criteria root
+        criteria.from(Contact.class);
+
+        // UPDATED: Execute query
+        List<Contact> contacts = session.createQuery(criteria).getResultList();
+
+        // Close the session
+        session.close();
+
+        return contacts;
+    }
+
+    private static void save(Contact contact)
+    {
+        //Open a session
+        Session session = sessionFactory.openSession();
+
+        //Begin a transaction
+        session.beginTransaction();
+
+        //Use the session to save the contact
+        session.save(contact);
+
+        //Commit the transaction
+        session.getTransaction().commit();
+
+        //Close the session
+        session.close();
     }
 }

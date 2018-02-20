@@ -6,8 +6,11 @@
         <!-- SQL Dialect -->
         <property name="dialect">org.hibernate.dialect.H2Dialect</property>
 
-        <!-- Create the database schema on startup -->
-        <property name="hbm2ddl.auto">create</property> <!-- hibernate mapping to data definition language -->
+        <!-- Update the database schema on startup -->
+        <property name="hbm2ddl.auto">update</property> <!-- hibernate mapping to data definition language -->
+
+        <!-- Show the queries prepared by Hibernate -->
+        <property name="show_sql">true</property>
 
         <!-- Names the annotated Entity classes -->
         <mapping class="com.teamtreehouse.contactmgr.model.Contact" />
