@@ -9,3 +9,6 @@ A web app for uploading, favoriting, categorizing, etc gifs. It is built using J
 
 ### [hibernate-basics](hibernate-basics)
 A few Java files showing how to create a JDBC connection and interact with a database using SQLite. Serves as a primer for what hibernate can offer us.
+
+### [contactmgr-hibernate](contactmgr-hibernate)
+A Java application using Hibernate to perform CRUD operations on a H2 database.
