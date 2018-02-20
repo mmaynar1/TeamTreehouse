@@ -30,10 +30,34 @@ public class Application
                 .withEmail("mmaynar1@gmail.com")
                 .withPhone(8675309L)
                 .build();
-        save(contact);
+        int id = save(contact);
 
-
+        System.out.println("Before update");
         fetchAllContacts().forEach(System.out::println);
+
+        Contact c = findContactByid(id);
+        c.setFirstName("Bob");
+        update(c);
+
+        System.out.println("After update");
+        fetchAllContacts().forEach(System.out::println);
+    }
+
+    private static Contact findContactByid(int id)
+    {
+        Session session = sessionFactory.openSession();
+        Contact contact = session.get( Contact.class, id );
+        session.close();
+        return contact;
+    }
+
+    private static void update(Contact contact)
+    {
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        session.update(contact);
+        session.getTransaction().commit();
+        session.close();
     }
 
     private static List<Contact> fetchAllContacts()
@@ -64,7 +88,7 @@ public class Application
         return contacts;
     }
 
-    private static void save(Contact contact)
+    private static int save(Contact contact)
     {
         //Open a session
         Session session = sessionFactory.openSession();
@@ -73,12 +97,13 @@ public class Application
         session.beginTransaction();
 
         //Use the session to save the contact
-        session.save(contact);
+        int id = (int)session.save(contact);
 
         //Commit the transaction
         session.getTransaction().commit();
 
         //Close the session
         session.close();
+        return id;
     }
 }
