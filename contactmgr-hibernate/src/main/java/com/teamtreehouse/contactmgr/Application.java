@@ -41,6 +41,11 @@ public class Application
 
         System.out.println("After update");
         fetchAllContacts().forEach(System.out::println);
+
+        System.out.println("After delete");
+        delete(c);
+        fetchAllContacts().forEach(System.out::println);
+
     }
 
     private static Contact findContactByid(int id)
@@ -49,6 +54,15 @@ public class Application
         Contact contact = session.get( Contact.class, id );
         session.close();
         return contact;
+    }
+
+    private static void delete(Contact contact)
+    {
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        session.delete(contact);
+        session.getTransaction().commit();
+        session.close();
     }
 
     private static void update(Contact contact)
