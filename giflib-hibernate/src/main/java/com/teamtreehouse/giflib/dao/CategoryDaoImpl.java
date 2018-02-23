@@ -5,6 +5,7 @@ import com.teamtreehouse.giflib.model.Category;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -34,7 +35,11 @@ public class CategoryDaoImpl implements CategoryDao
     @Override
     public void save(Category category)
     {
-
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        session.save(category);
+        session.getTransaction().commit();
+        session.close();
     }
 
     @Override
