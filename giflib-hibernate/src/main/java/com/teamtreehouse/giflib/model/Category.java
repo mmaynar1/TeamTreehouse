@@ -13,7 +13,7 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @NotNull
-    @Size(min = 3, max = 12)
+    @Size(min = 3, max = 12, message = "{category.name.size}")
     private String name;
     @NotNull
     @Pattern(regexp = "#[0-9a-fA-F]{6}")
