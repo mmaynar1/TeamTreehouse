@@ -60,7 +60,6 @@ public class GifController
     // Upload a new GIF
     @RequestMapping(value = "/gifs", method = RequestMethod.POST)
     public String addGif(Gif gif, @RequestParam MultipartFile file, RedirectAttributes redirectAttributes ) {
-        // TODO: Upload new GIF if data is valid
         gifService.save(gif, file);
         redirectAttributes.addFlashAttribute("flash", new FlashMessage("GIF successfully uploaded!", FlashMessage.Status.SUCCESS));
         return String.format("redirect:/gifs/%s", gif.getId());
@@ -86,10 +85,10 @@ public class GifController
     public String formEditGif(@PathVariable Long gifId, Model model) {
         if( !model.containsAttribute("gif"))
         {
-            model.addAttribute("gif", new Gif());
+            model.addAttribute("gif", gifService.findById(gifId));
         }
         model.addAttribute("categories", categoryService.findAll() );
-        model.addAttribute("action", "/gifs");
+        model.addAttribute("action", String.format("/gifs/%s", gifId));
         model.addAttribute("heading", "Edit GIF");
         model.addAttribute("submit", "Update");
         return "gif/form";
@@ -97,11 +96,14 @@ public class GifController
 
     // Update an existing GIF
     @RequestMapping(value = "/gifs/{gifId}", method = RequestMethod.POST)
-    public String updateGif() {
-        // TODO: Update GIF if data is valid
+    public String updateGif( Gif gif, @RequestParam MultipartFile file, RedirectAttributes redirectAttributes) {
+        gifService.save(gif,file);
 
-        // TODO: Redirect browser to updated GIF's detail view
-        return null;
+        // Flash message
+        redirectAttributes.addFlashAttribute("flash",new FlashMessage("GIF successfully updated!", FlashMessage.Status.SUCCESS));
+
+        // Redirect browser to updated GIF's detail view
+        return String.format("redirect:/gifs/%s",gif.getId());
     }
 
     // Delete an existing GIF
