@@ -1,5 +1,6 @@
 package com.teamtreehouse.giflib.web.controller;
 
+import com.teamtreehouse.giflib.exceptions.CategoryNotEmptyException;
 import com.teamtreehouse.giflib.model.Category;
 import com.teamtreehouse.giflib.service.CategoryService;
 import com.teamtreehouse.giflib.web.Color;
@@ -8,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -19,6 +21,7 @@ import java.util.List;
 @Controller
 public class CategoryController {
 
+    public static final String FLASH = "flash";
     @Autowired
     private CategoryService categoryService;
 
@@ -79,7 +82,7 @@ public class CategoryController {
             return String.format("redirect:/categories/%s/edit", category.getId() );
         }
         categoryService.save(category);
-        redirectAttributes.addFlashAttribute("flash", new FlashMessage("Category successfully updated!", FlashMessage.Status.SUCCESS));
+        redirectAttributes.addFlashAttribute(FLASH, new FlashMessage("Category successfully updated!", FlashMessage.Status.SUCCESS));
         return "redirect:/categories";
     }
 
@@ -93,16 +96,26 @@ public class CategoryController {
             return "redirect:/categories/add";
         }
         categoryService.save(category);
-        redirectAttributes.addFlashAttribute("flash", new FlashMessage("Category successfully added!", FlashMessage.Status.SUCCESS));
+        redirectAttributes.addFlashAttribute(FLASH, new FlashMessage("Category successfully added!", FlashMessage.Status.SUCCESS));
         return "redirect:/categories";
     }
 
     // Delete an existing category
     @RequestMapping(value = "/categories/{categoryId}/delete", method = RequestMethod.POST)
-    public String deleteCategory(@PathVariable Long categoryId) {
-        // TODO: Delete category if it contains no GIFs
-
-        // TODO: Redirect browser to /categories
-        return null;
+    public String deleteCategory( @PathVariable Long categoryId, RedirectAttributes redirectAttributes )
+    {
+        Category category = categoryService.findById(categoryId);
+        try
+        {
+            categoryService.delete(category);
+            redirectAttributes.addFlashAttribute(FLASH, new FlashMessage("Category deleted!", FlashMessage.Status.SUCCESS));
+        }
+        catch ( CategoryNotEmptyException categoryNotEmptyException )
+        {
+            redirectAttributes.addFlashAttribute(FLASH, new FlashMessage("Only empty categories can be deleted", FlashMessage.Status.FAILURE));
+            return String.format("redirect:/categories/%s/edit", categoryId);
+        }
+        return "redirect:/categories";
     }
+
 }
