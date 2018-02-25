@@ -31,3 +31,11 @@ dependencies {
     compile 'org.apache.tomcat:tomcat-dbcp:8.0.32'
     compile 'com.h2database:h2:1.4.191'
 }
+
+task stage {
+    dependsOn build
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.2' //version required
+}

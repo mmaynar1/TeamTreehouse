@@ -1,1 +1,1 @@
-web: java $JAVA_OPTS -jar target/*.jar --p $PORT
+web: java -Dserver.port=$PORT -jar build/libs/giflib-hibernate-1.0-SNAPSHOT.jar
