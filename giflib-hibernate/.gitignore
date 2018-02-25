@@ -9,6 +9,7 @@
 
 ## Package Files #
 *.jar
+!*gradle-wrapper.jar
 !h2*.jar
 *.war
 *.ear
