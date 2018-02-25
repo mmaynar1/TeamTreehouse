@@ -1,5 +1,5 @@
 # TeamTreehouse
-This repository contains Team Treehouse projects
+This repository contains Team Treehouse projects.
 
 ### [course-ideas](course-ideas)
 A web app for submitting and voting on course ideas. It is built using Java, the Spark framework, and the Handlebars templating engine. When running locally, use localhost:4567
